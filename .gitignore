@@ -1,0 +1,8 @@
+*.out
+
+*.sh
+
+test_file.json
+
+.vscode/
+*.o

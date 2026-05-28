@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <curl/curl.h>
 #include <string.h>
-
+#include <cjson/cJSON.h>
 struct MemoryStruct
 {
     char *memory;
@@ -46,9 +46,11 @@ char* get_location()
     }
     CURLcode result;
 
-    curl_easy_setopt(curl, CURLOPT_URL, "http://ip-api.com/json/?fields=1105945");    
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, parse_data);
+    //CURENT IP : http://ip-api.com/json/?fields=57347
 
+    curl_easy_setopt(curl, CURLOPT_URL, "http://ip-api.com/json/?fields=57347");    
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, parse_data);
+    
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&data);
 
     curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
@@ -66,4 +68,83 @@ char* get_location()
     curl_easy_cleanup(curl);
     //free(data.memory);
     return data.memory;
+}
+char *find_best_server(char *Country, char *CountryC, float *p_latency)
+{
+    FILE *fp = fopen("speedtest_server_list.json", "r");
+    if (fp == NULL)
+    {
+        printf("Error: Can't open file \n");
+        return NULL;
+    }
+
+    fseek(fp, 0, SEEK_END);
+    int size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    char *buffer = malloc(size + 1);
+
+    if (buffer == NULL)
+    {
+        free(buffer);
+        return NULL;
+    }
+    int len = fread(buffer, 1, size, fp);
+    fclose(fp);
+
+    cJSON *json = cJSON_Parse(buffer);
+    if (json == NULL)
+    {
+        const char *error_ptr = cJSON_GetErrorPtr();
+        if (error_ptr != NULL)
+        {
+            printf("Error: %s\n", error_ptr);
+        }
+        free(buffer);
+        cJSON_Delete(json);
+        return NULL;
+    }
+
+    int count = cJSON_GetArraySize(json);
+    float max_latency = 9999.f;
+    char *best_server = NULL;
+    for (int i = 0; i < count; i++)
+    {
+        cJSON *item = cJSON_GetArrayItem(json, i);
+        cJSON *country = cJSON_GetObjectItemCaseSensitive(item, "country");
+
+        if (strcmp(country->valuestring, Country) == 0 || strcmp(country->valuestring, CountryC) == 0) //TODO: ADD EDGE CASE, IF WE DONT FIGHT ANY SERVERS IN USER LOCATION
+        {
+            cJSON *provider = cJSON_GetObjectItemCaseSensitive(item, "provider");
+            cJSON *host = cJSON_GetObjectItemCaseSensitive(item, "host");
+            cJSON *id = cJSON_GetObjectItemCaseSensitive(item, "id");
+            float latency = ping_server(host->valuestring);
+            printf("Checking: %s server \n", host->valuestring);
+            if (latency > 0)
+            {
+                //printf("Latency is : %f\n", latency);
+                if (latency <= max_latency)
+                {
+                    best_server = host->valuestring;
+                    max_latency = latency;
+                }
+                else
+                {
+                    //printf("Testing");
+                    continue;
+                }
+            }
+            else
+            {
+                printf("Connection Error : Invalid Host\n");
+                printf("Check your hostname or try a different server\n");
+
+            }
+
+        }
+    }
+
+    //cJSON_Delete(json);
+    //free(buffer);
+    *p_latency = max_latency;
+    return best_server;
 }

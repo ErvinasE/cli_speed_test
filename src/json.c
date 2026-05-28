@@ -3,6 +3,30 @@
 #include <stdlib.h>
 #include <cjson/cJSON.h>
 #include "location.c"
+// char *open_file()
+// {
+//     FILE *fp = fopen("speedtest_server_list.json", "r");
+//     if (fp == NULL)
+//     {
+//         printf("Error: Can't open file \n");
+//         return 1;
+//     }
+
+//     fseek(fp, 0, SEEK_END);
+//     int size = ftell(fp);
+//     fseek(fp, 0, SEEK_SET);
+//     char *buffer = malloc(size + 1);
+
+//     if (buffer == NULL)
+//     {
+//         free(buffer);
+//         return 1;
+//     }
+//     int len = fread(buffer, 1, size, fp);
+//     fclose(fp);
+//     return *buffer;
+
+// }
 int parse_json()
 {
     FILE *fp = fopen("speedtest_server_list.json", "r");
@@ -48,28 +72,19 @@ int parse_json()
         cJSON *host = cJSON_GetObjectItemCaseSensitive(item, "host");
         cJSON *id = cJSON_GetObjectItemCaseSensitive(item, "id");
 
-        printf("First coutnry is %s\n", country->valuestring);
-        printf("City is %s\n", city->valuestring);
-        printf("Provider is %s\n", provider->valuestring);
-        printf("Host is %s\n", host->valuestring);
-        printf("id is %d\n", id->valueint);
+        printf("Country: %s\n", country->valuestring);
+        printf("City: %s\n", city->valuestring);
+        printf("Provider: %s\n", provider->valuestring);
+        printf("Host: %s\n", host->valuestring);
+        printf("id: %d\n", id->valueint);
         printf("\n");
-
-        // if (cJSON_IsNumber(id) && (int)id->valueint == 21841)
-        // {
-        //     printf("First coutnry is %s\n", country->valuestring);
-        //     printf("City is %s\n", city->valuestring);
-        //     printf("Provider is %s\n", provider->valuestring);
-        //     printf("Host is %s\n", host->valuestring);
-        //     printf("id is %d\n", id->valueint);
-        //     return 0;
-        // }
     }
+    //printf("THE COUNT: %d\n", count);
     cJSON_Delete(json);
     free(buffer);
     return 0;
 }
-int parse_location(char *json_data)
+int parse_location(char *json_data, char *Country, char *CountryCode, size_t maxlen)
 {
     cJSON *json = cJSON_Parse(json_data);
     if (json == NULL)
@@ -87,18 +102,27 @@ int parse_location(char *json_data)
     {
         printf("Status: %s\n", status->valuestring);
         printf("API ERROR\n");
+        cJSON_Delete(json);
         return 1;
 
     }
 
     cJSON *country = cJSON_GetObjectItemCaseSensitive(json, "country");
-    printf("Country: %s\n", country->valuestring);
+    //printf("Country: %s\n", country->valuestring);
 
-    cJSON *regionName = cJSON_GetObjectItemCaseSensitive(json, "regionName");
-    printf("Region: %s\n", regionName->valuestring);
+    cJSON *countryCode = cJSON_GetObjectItemCaseSensitive(json, "countryCode");
+    //printf("Country code: %s\n", countryCode->valuestring);
 
-    cJSON *city = cJSON_GetObjectItemCaseSensitive(json, "city");
-    printf("City: %s\n", city->valuestring);
-    
+    if ((country && country->valuestring) && countryCode && countryCode->valuestring)
+    {
+        strncpy(Country, country->valuestring, maxlen - 1);
+        strncpy(CountryCode, countryCode->valuestring, 9);
+        CountryCode[9] = '\0';
+
+        Country[maxlen-1] = '\0';
+        CountryCode[maxlen-1] = '\0';
+    }
+    cJSON_Delete(json);
+
     return 0;
 }
