@@ -37,11 +37,14 @@ Test Results:
 Download speed is : 924.7 Mbps
 ```
 # Compiling 
-### Use 
+### Compile the whole project 
 ```bash
 make
 ```
-### To compile the whole project
+### To clean files
+```bash
+make clean
+```
 # Usage
 ### Automatic test (location > best server > upload > download)
 ```bash
