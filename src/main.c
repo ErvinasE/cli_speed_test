@@ -1,52 +1,44 @@
-#include "latency.c"
-#include "json.c"
-#include "speed_tests.c"
+#include "latency.h"
+#include "json.h"
+#include "location.h"
+#include "speed_tests.h"
 #include <unistd.h>
 #include <locale.h>
 #include <stdio.h>
-#include "tests.c"
+#include <stdlib.h>
+#include <string.h>
+#include "tests.h"
 
 extern char *optarg;
 
 int automated_test()
 {
     //1 Get location, find best server, download, upload
-    //TODO: CANCEL THE TEST IF IT FINDS NO SERVER 
     char Country[100] = {0};
     char CountryCode[10] = {0};
     char Continent[20] = {0};
     float best_ping;
-    char *best_server;
+    char *best_server = NULL;
     
     printf("Determining your location...\n");
     char* data = get_location();
-    if (parse_location(data, Country, CountryCode, Continent, sizeof(Country)) != 0)
+    if (data == NULL || parse_location(data, Country, CountryCode, Continent, sizeof(Country)) != 0)
     {
         printf("Failure to determine location \n");
+        if (data) free(data);
+        return 1;
     }
-    else
-    {
-        printf("Succesfully determined your location\n");
-    }
+    printf("Succesfully determined your location\n");
 
     printf("Finding the best server for your location...\n");
-    if (parse_location(data, Country, CountryCode, Continent, sizeof(Country)) == 0)
+    char *server_name = find_best_server(Country, CountryCode, &best_ping, Continent);
+    if (server_name == NULL)
     {
-        //strcpy(Country, "China");
-        //strcpy(CountryCode, "CN");
-        char *server_name = find_best_server(Country, CountryCode, &best_ping, Continent);
-        if (server_name == NULL)
-        {
-            printf("Erorr: no servers were found in that country");
-            return 1;
-        }
-        best_server = server_name;
-
+        printf("Error: no servers were found in that country or continent\n");
+        free(data);
+        return 1;
     }
-    else
-    {
-        printf("Failure to determine server \n");
-    }
+    best_server = server_name;
 
     printf("Uploading 32mb of data to %s\n", best_server);
     double u_test = upload_test(best_server);
@@ -63,6 +55,7 @@ int automated_test()
     if (d_test > 0) printf("Download speed is : %.1f Mbps\n",d_test);
     else printf("Download test failed: Connection timeout\n");
     free(data);
+    return 0;
 }
 int main(int argc, char *argv[])
 {

@@ -1,4 +1,7 @@
+#include "tests.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include "location.h"
 
 void fake_country()
 {

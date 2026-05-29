@@ -1,5 +1,8 @@
+#include "speed_tests.h"
 #include <curl/curl.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 
 static size_t discard_data_callback (void *ptr, size_t size, size_t nmemb, void *userdata)

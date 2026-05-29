@@ -1,14 +1,12 @@
+#include "location.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <curl/curl.h>
 #include <string.h>
 #include <cjson/cJSON.h>
 #include <stdbool.h>
-struct MemoryStruct
-{
-    char *memory;
-    size_t size;
-};
+#include "countries.h"
+#include "latency.h"
 
 static size_t parse_data(char *buffer, size_t size, size_t nitems, void* userdata)
 {
@@ -73,7 +71,7 @@ char* get_location()
 }
 char *find_best_server(char *Country, char *CountryC, float *p_latency, char *Continent)
 {
-    FILE *fp = fopen("test_file.json", "r");
+    FILE *fp = fopen("speedtest_server_list.json", "r");
     if (fp == NULL)
     {
         printf("Error: Can't open file \n");
@@ -144,15 +142,51 @@ char *find_best_server(char *Country, char *CountryC, float *p_latency, char *Co
             }
 
         }
-        if (found == false && i == count - 1)
-        {
-            printf("Found 0 working servers inside %s, trying the %s continent...\n", Country, Continent);
-            return "1";
-        }
     }
 
-    //cJSON_Delete(json);
-    //free(buffer);
+    if (found == false)
+    {
+        printf("Found 0 working servers inside %s, trying the %s continent...\n", Country, Continent);
+        int continent_size = 0;
+        CountryData *continent_data = get_continent_data(Continent, &continent_size);
+        if (continent_data != NULL)
+        {
+            for (int k = 0; k < continent_size; k++) continent_data[k].ping_count = 0;
+
+            for (int i = 0; i < count; i++)
+            {
+                cJSON *item = cJSON_GetArrayItem(json, i);
+                cJSON *country_item = cJSON_GetObjectItemCaseSensitive(item, "country");
+                if (!country_item || !country_item->valuestring) continue;
+
+                for (int k = 0; k < continent_size; k++)
+                {
+                    if (strcmp(country_item->valuestring, continent_data[k].name) == 0 || strcmp(country_item->valuestring, continent_data[k].code) == 0)
+                    {
+                        if (continent_data[k].ping_count < 2)
+                        {
+                            cJSON *host = cJSON_GetObjectItemCaseSensitive(item, "host");
+                            if (!host || !host->valuestring) continue;
+
+                            printf("Checking %s %s server \n", continent_data[k].name, host->valuestring);
+                            continent_data[k].ping_count++;
+                            float latency = ping_server(host->valuestring);
+                            if (latency > 0)
+                            {
+                                if (latency <= max_latency)
+                                {
+                                    best_server = host->valuestring;
+                                    found = true;
+                                    max_latency = latency;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
     *p_latency = max_latency;
     return best_server;
 }

@@ -1,11 +1,12 @@
+#include "json.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <cjson/cJSON.h>
-#include "location.c"
+#include "location.h"
 int parse_json()
 {
-    FILE *fp = fopen("test_file.json", "r");
+    FILE *fp = fopen("speedtest_server_list.json", "r");
     if (fp == NULL)
     {
         printf("Error: Can't open file \n");

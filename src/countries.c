@@ -1,13 +1,9 @@
+#include "countries.h"
 #include <stdio.h>
-
-typedef struct {
-    const char *name;
-    const char *code;
-    int ping_count;
-} Country;
+#include <string.h>
 
 /* Africa */
-Country AF[] = {
+CountryData AF[] = {
     {"Algeria", "DZ", 0},
     {"Angola", "AO", 0},
     {"Benin", "BJ", 0},
@@ -65,7 +61,7 @@ Country AF[] = {
 };
 
 /* Europe */
-Country EU[] = {
+CountryData EU[] = {
     {"Albania", "AL", 0},
     {"Andorra", "AD", 0},
     {"Austria", "AT", 0},
@@ -112,7 +108,7 @@ Country EU[] = {
 };
 
 /* Asia */
-Country AS[] = {
+CountryData AS[] = {
     {"Afghanistan", "AF", 0},
     {"Armenia", "AM", 0},
     {"Azerbaijan", "AZ", 0},
@@ -163,7 +159,7 @@ Country AS[] = {
 };
 
 /* North America */
-Country NA[] = {
+CountryData NA[] = {
     {"Antigua and Barbuda", "AG", 0},
     {"Bahamas", "BS", 0},
     {"Barbados", "BB", 0},
@@ -190,7 +186,7 @@ Country NA[] = {
 };
 
 /* South America */
-Country SA[] = {
+CountryData SA[] = {
     {"Argentina", "AR", 0},
     {"Bolivia", "BO", 0},
     {"Brazil", "BR", 0},
@@ -206,7 +202,7 @@ Country SA[] = {
 };
 
 /* Oceania */
-Country OCE[] = {
+CountryData OCE[] = {
     {"Australia", "AU", 0},
     {"Fiji", "FJ", 0},
     {"Kiribati", "KI", 0},
@@ -223,7 +219,7 @@ Country OCE[] = {
     {"Vanuatu", "VU", 0}
 };
 
-Country* get_continent_data(const char *continent_code, int *size) {
+CountryData* get_continent_data(const char *continent_code, int *size) {
     if (strcmp(continent_code, "AF") == 0) { *size = sizeof(AF)/sizeof(AF[0]); return AF; }
     if (strcmp(continent_code, "EU") == 0) { *size = sizeof(EU)/sizeof(EU[0]); return EU; }
     if (strcmp(continent_code, "AS") == 0) { *size = sizeof(AS)/sizeof(AS[0]); return AS; }
