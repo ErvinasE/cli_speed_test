@@ -36,6 +36,12 @@ Upload speed is : 865.4 Mbps
 Test Results:
 Download speed is : 924.7 Mbps
 ```
+#Compiling 
+### Use 
+```bash
+make
+```
+### To compile the whole project
 # Usage
 ### Automatic test (location > best server > upload > download)
 ```bash
