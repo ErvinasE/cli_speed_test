@@ -14,8 +14,8 @@ float ping_server(const char *host)
     }
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 1L);
 
     curl_easy_perform(curl);
 

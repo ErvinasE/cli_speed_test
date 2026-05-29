@@ -3,6 +3,7 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <cjson/cJSON.h>
+#include <stdbool.h>
 struct MemoryStruct
 {
     char *memory;
@@ -48,7 +49,8 @@ char* get_location()
 
     //CURENT IP : http://ip-api.com/json/?fields=57347
 
-    curl_easy_setopt(curl, CURLOPT_URL, "http://ip-api.com/json/?fields=57347");    
+    curl_easy_setopt(curl, CURLOPT_URL, "http://ip-api.com/json/?fields=2146307");
+    //1097731
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, parse_data);
     
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&data);
@@ -60,7 +62,7 @@ char* get_location()
 
     if (result != CURLE_OK)
     {
-        fprintf(stderr, "Download falure %s\n", curl_easy_strerror(result));
+        fprintf(stderr, "Download failure %s\n", curl_easy_strerror(result));
     }
 
     //printf("%s\n", data.memory);
@@ -69,9 +71,9 @@ char* get_location()
     //free(data.memory);
     return data.memory;
 }
-char *find_best_server(char *Country, char *CountryC, float *p_latency)
+char *find_best_server(char *Country, char *CountryC, float *p_latency, char *Continent)
 {
-    FILE *fp = fopen("speedtest_server_list.json", "r");
+    FILE *fp = fopen("test_file.json", "r");
     if (fp == NULL)
     {
         printf("Error: Can't open file \n");
@@ -107,12 +109,13 @@ char *find_best_server(char *Country, char *CountryC, float *p_latency)
     int count = cJSON_GetArraySize(json);
     float max_latency = 9999.f;
     char *best_server = NULL;
+    bool found = false;
     for (int i = 0; i < count; i++)
     {
         cJSON *item = cJSON_GetArrayItem(json, i);
         cJSON *country = cJSON_GetObjectItemCaseSensitive(item, "country");
 
-        if (strcmp(country->valuestring, Country) == 0 || strcmp(country->valuestring, CountryC) == 0) //TODO: ADD EDGE CASE, IF WE DONT FIGHT ANY SERVERS IN USER LOCATION
+        if (strcmp(country->valuestring, Country) == 0 || strcmp(country->valuestring, CountryC) == 0) //TODO: ADD EDGE CASE, IF WE DONT FIND ANY WORKING SERVERS IN USER LOCATION
         {
             cJSON *provider = cJSON_GetObjectItemCaseSensitive(item, "provider");
             cJSON *host = cJSON_GetObjectItemCaseSensitive(item, "host");
@@ -125,6 +128,7 @@ char *find_best_server(char *Country, char *CountryC, float *p_latency)
                 if (latency <= max_latency)
                 {
                     best_server = host->valuestring;
+                    found = true;
                     max_latency = latency;
                 }
                 else
@@ -136,10 +140,14 @@ char *find_best_server(char *Country, char *CountryC, float *p_latency)
             else
             {
                 printf("Connection Error : Invalid Host\n");
-                printf("Check your hostname or try a different server\n");
 
             }
 
+        }
+        if (found == false && i == count - 1)
+        {
+            printf("Found 0 working servers inside %s, trying the %s continent...\n", Country, Continent);
+            return "1";
         }
     }
 

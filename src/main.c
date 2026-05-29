@@ -4,22 +4,23 @@
 #include <unistd.h>
 #include <locale.h>
 #include <stdio.h>
-
+#include "tests.c"
 
 extern char *optarg;
 
 int automated_test()
 {
     //1 Get location, find best server, download, upload
-
+    //TODO: CANCEL THE TEST IF IT FINDS NO SERVER 
     char Country[100] = {0};
     char CountryCode[10] = {0};
+    char Continent[20] = {0};
     float best_ping;
     char *best_server;
     
     printf("Determining your location...\n");
     char* data = get_location();
-    if (parse_location(data, Country, CountryCode, sizeof(Country)) != 0)
+    if (parse_location(data, Country, CountryCode, Continent, sizeof(Country)) != 0)
     {
         printf("Failure to determine location \n");
     }
@@ -27,37 +28,40 @@ int automated_test()
     {
         printf("Succesfully determined your location\n");
     }
+
     printf("Finding the best server for your location...\n");
-    char* p_data = get_location();
-    if (parse_location(p_data, Country, CountryCode, sizeof(Country)) == 0)
+    if (parse_location(data, Country, CountryCode, Continent, sizeof(Country)) == 0)
     {
-        char *server_name = find_best_server(Country, CountryCode, &best_ping);
+        //strcpy(Country, "China");
+        //strcpy(CountryCode, "CN");
+        char *server_name = find_best_server(Country, CountryCode, &best_ping, Continent);
+        if (server_name == NULL)
+        {
+            printf("Erorr: no servers were found in that country");
+            return 1;
+        }
         best_server = server_name;
 
     }
     else
     {
-        printf("Failure to determine location \n");
+        printf("Failure to determine server \n");
     }
 
     printf("Uploading 32mb of data to %s\n", best_server);
     double u_test = upload_test(best_server);
-    if (u_test == 1.000000)
-    {
-        return 1;
-    }
+
     printf("Downloading 32mb of data from %s\n", best_server);
     double d_test = download_test(best_server);
-    if (d_test == 1.000000)
-    {
-        return 1;
-    }
+
     printf("********************************************************************************************************\n");
     printf("Test Results:\n");
     printf("Your location: %s\n", Country);
     printf("Server: %s\n", best_server);
-    printf("Upload speed is : %.1f Mbps\n",u_test);
-    printf("Download speed is : %.1f Mbps\n",d_test);
+    if (u_test > 0) printf("Upload speed is : %.1f Mbps\n",u_test);
+    else printf("Upload test failed: Connection timout\n");
+    if (d_test > 0) printf("Download speed is : %.1f Mbps\n",d_test);
+    else printf("Download test failed: Connection timeout\n");
     free(data);
 }
 int main(int argc, char *argv[])
@@ -69,17 +73,19 @@ int main(int argc, char *argv[])
     int opt;
     char Country[100] = {0};
     char CountryCode[10] = {0};
+    char Continent[10] = {0};
     float best_ping;
-    while ((opt = getopt(argc, argv, "u:d:lp")) != -1)
+    while ((opt = getopt(argc, argv, "u:d:lpt")) != -1)
     {
         switch(opt)
         {
             case 'u':
                 printf("Uploading 32mb of data to %s\n", optarg);
                 double u_test = upload_test(optarg);
-                if (u_test == 1.000000)
+                if (u_test <= 0)
                 {
-                    break;
+                    //printf("Upload test failed: Connection timout\n");
+                    return 1;
                 }
                 else
                 {
@@ -91,9 +97,10 @@ int main(int argc, char *argv[])
             case 'd':
                 printf("Downloading 32mb of data from %s\n", optarg);
                 double d_test = download_test(optarg);
-                if (d_test == 1.000000)
+                if (d_test <= 0)
                 {
-                    break;
+                    //printf("Download test failed: Connection timout\n");
+                    return 1;
                 }
                 else
                 {
@@ -105,7 +112,7 @@ int main(int argc, char *argv[])
             case 'l':
                 printf("Determining your location...\n");
                 char* data = get_location();
-                if (parse_location(data, Country, CountryCode, sizeof(Country)) == 0)
+                if (parse_location(data, Country, CountryCode, Continent, sizeof(Country)) == 0)
                 {
                     printf("*************************************************************\n");
                     printf("Test Results:\n");
@@ -121,10 +128,10 @@ int main(int argc, char *argv[])
             case 'p':
                 printf("Finding the best server for your location...\n");
                 char* p_data = get_location();
-                if (parse_location(p_data, Country, CountryCode, sizeof(Country)) == 0)
+                if (parse_location(p_data, Country, CountryCode, Continent, sizeof(Country)) == 0)
                 {
 
-                    char *server_name = find_best_server(Country, CountryCode, &best_ping);
+                    char *server_name = find_best_server(Country, CountryCode, &best_ping, Continent);
                     printf("*************************************************************\n");
                     printf("Test Results:\n");
                     printf("Best server is: %s\n", server_name);
@@ -135,6 +142,12 @@ int main(int argc, char *argv[])
                 }
                 //free(data);
                 //printf("%s\n", Country);
+                break;
+            case 't':
+                printf("Running non existant country test...\n");
+                {
+                    fake_country();
+                }
                 break;
             case '?':
                 break;

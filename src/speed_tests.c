@@ -43,7 +43,7 @@ double download_test(const char *host)
     {
         fprintf(stderr, "Download failed: %s\n", curl_easy_strerror(result));
         curl_easy_cleanup(curl);
-        return 1;
+        return -1;
     }
     curl_easy_cleanup(curl);
 
@@ -94,7 +94,7 @@ double upload_test(const char *host)
     {
         fprintf(stderr, "Upload failed: %s\n", curl_easy_strerror(result));
         curl_easy_cleanup(curl);
-        return 1;
+        return -1;
     }
     free(buffer);
     curl_easy_cleanup(curl);

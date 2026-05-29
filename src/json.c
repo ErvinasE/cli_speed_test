@@ -3,33 +3,9 @@
 #include <stdlib.h>
 #include <cjson/cJSON.h>
 #include "location.c"
-// char *open_file()
-// {
-//     FILE *fp = fopen("speedtest_server_list.json", "r");
-//     if (fp == NULL)
-//     {
-//         printf("Error: Can't open file \n");
-//         return 1;
-//     }
-
-//     fseek(fp, 0, SEEK_END);
-//     int size = ftell(fp);
-//     fseek(fp, 0, SEEK_SET);
-//     char *buffer = malloc(size + 1);
-
-//     if (buffer == NULL)
-//     {
-//         free(buffer);
-//         return 1;
-//     }
-//     int len = fread(buffer, 1, size, fp);
-//     fclose(fp);
-//     return *buffer;
-
-// }
 int parse_json()
 {
-    FILE *fp = fopen("speedtest_server_list.json", "r");
+    FILE *fp = fopen("test_file.json", "r");
     if (fp == NULL)
     {
         printf("Error: Can't open file \n");
@@ -84,7 +60,7 @@ int parse_json()
     free(buffer);
     return 0;
 }
-int parse_location(char *json_data, char *Country, char *CountryCode, size_t maxlen)
+int parse_location(char *json_data, char *Country, char *CountryCode, char *ContinentCode, size_t maxlen)
 {
     cJSON *json = cJSON_Parse(json_data);
     if (json == NULL)
@@ -98,7 +74,7 @@ int parse_location(char *json_data, char *Country, char *CountryCode, size_t max
         return 1;
     }
     cJSON *status = cJSON_GetObjectItemCaseSensitive(json, "status");
-    if (strcmp(status->valuestring, "fail") == 0)
+    if (status && status->valuestring && strcmp(status->valuestring, "fail") == 0)
     {
         printf("Status: %s\n", status->valuestring);
         printf("API ERROR\n");
@@ -112,15 +88,19 @@ int parse_location(char *json_data, char *Country, char *CountryCode, size_t max
 
     cJSON *countryCode = cJSON_GetObjectItemCaseSensitive(json, "countryCode");
     //printf("Country code: %s\n", countryCode->valuestring);
+    cJSON *continentCode = cJSON_GetObjectItemCaseSensitive(json, "continentCode");
 
-    if ((country && country->valuestring) && countryCode && countryCode->valuestring)
+    if ((country && country->valuestring) && countryCode && countryCode->valuestring && continentCode && continentCode->valuestring)
     {
         strncpy(Country, country->valuestring, maxlen - 1);
         strncpy(CountryCode, countryCode->valuestring, 9);
+        strncpy(ContinentCode, continentCode->valuestring, 9);
         CountryCode[9] = '\0';
+        ContinentCode[9] = '\0';
 
         Country[maxlen-1] = '\0';
-        CountryCode[maxlen-1] = '\0';
+        //CountryCode[maxlen-1] = '\0';
+        
     }
     cJSON_Delete(json);
 

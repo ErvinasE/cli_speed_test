@@ -1,0 +1,235 @@
+#include <stdio.h>
+
+typedef struct {
+    const char *name;
+    const char *code;
+    int ping_count;
+} Country;
+
+/* Africa */
+Country AF[] = {
+    {"Algeria", "DZ", 0},
+    {"Angola", "AO", 0},
+    {"Benin", "BJ", 0},
+    {"Botswana", "BW", 0},
+    {"Burkina Faso", "BF", 0},
+    {"Burundi", "BI", 0},
+    {"Cameroon", "CM", 0},
+    {"Cape Verde", "CV", 0},
+    {"Central African Republic", "CF", 0},
+    {"Chad", "TD", 0},
+    {"Comoros", "KM", 0},
+    {"Congo", "CG", 0},
+    {"Democratic Republic of the Congo", "CD", 0},
+    {"Djibouti", "DJ", 0},
+    {"Egypt", "EG", 0},
+    {"Equatorial Guinea", "GQ", 0},
+    {"Eritrea", "ER", 0},
+    {"Eswatini", "SZ", 0},
+    {"Ethiopia", "ET", 0},
+    {"Gabon", "GA", 0},
+    {"Gambia", "GM", 0},
+    {"Ghana", "GH", 0},
+    {"Guinea", "GN", 0},
+    {"Guinea-Bissau", "GW", 0},
+    {"Ivory Coast", "CI", 0},
+    {"Kenya", "KE", 0},
+    {"Lesotho", "LS", 0},
+    {"Liberia", "LR", 0},
+    {"Libya", "LY", 0},
+    {"Madagascar", "MG", 0},
+    {"Malawi", "MW", 0},
+    {"Mali", "ML", 0},
+    {"Mauritania", "MR", 0},
+    {"Mauritius", "MU", 0},
+    {"Morocco", "MA", 0},
+    {"Mozambique", "MZ", 0},
+    {"Namibia", "NA", 0},
+    {"Niger", "NE", 0},
+    {"Nigeria", "NG", 0},
+    {"Rwanda", "RW", 0},
+    {"Sao Tome and Principe", "ST", 0},
+    {"Senegal", "SN", 0},
+    {"Seychelles", "SC", 0},
+    {"Sierra Leone", "SL", 0},
+    {"Somalia", "SO", 0},
+    {"South Africa", "ZA", 0},
+    {"South Sudan", "SS", 0},
+    {"Sudan", "SD", 0},
+    {"Tanzania", "TZ", 0},
+    {"Togo", "TG", 0},
+    {"Tunisia", "TN", 0},
+    {"Uganda", "UG", 0},
+    {"Zambia", "ZM", 0},
+    {"Zimbabwe", "ZW", 0}
+};
+
+/* Europe */
+Country EU[] = {
+    {"Albania", "AL", 0},
+    {"Andorra", "AD", 0},
+    {"Austria", "AT", 0},
+    {"Belarus", "BY", 0},
+    {"Belgium", "BE", 0},
+    {"Bosnia and Herzegovina", "BA", 0},
+    {"Bulgaria", "BG", 0},
+    {"Croatia", "HR", 0},
+    {"Cyprus", "CY", 0},
+    {"Czech Republic", "CZ", 0},
+    {"Denmark", "DK", 0},
+    {"Estonia", "EE", 0},
+    {"Finland", "FI", 0},
+    {"France", "FR", 0},
+    {"Germany", "DE", 0},
+    {"Greece", "GR", 0},
+    {"Hungary", "HU", 0},
+    {"Iceland", "IS", 0},
+    {"Ireland", "IE", 0},
+    {"Italy", "IT", 0},
+    {"Latvia", "LV", 0},
+    {"Lithuania", "LT", 0},
+    {"Luxembourg", "LU", 0},
+    {"Malta", "MT", 0},
+    {"Moldova", "MD", 0},
+    {"Monaco", "MC", 0},
+    {"Montenegro", "ME", 0},
+    {"Netherlands", "NL", 0},
+    {"North Macedonia", "MK", 0},
+    {"Norway", "NO", 0},
+    {"Poland", "PL", 0},
+    {"Portugal", "PT", 0},
+    {"Romania", "RO", 0},
+    {"San Marino", "SM", 0},
+    {"Serbia", "RS", 0},
+    {"Slovakia", "SK", 0},
+    {"Slovenia", "SI", 0},
+    {"Spain", "ES", 0},
+    {"Sweden", "SE", 0},
+    {"Switzerland", "CH", 0},
+    {"Ukraine", "UA", 0},
+    {"United Kingdom", "GB", 0},
+    {"Vatican City", "VA", 0}
+};
+
+/* Asia */
+Country AS[] = {
+    {"Afghanistan", "AF", 0},
+    {"Armenia", "AM", 0},
+    {"Azerbaijan", "AZ", 0},
+    {"Bahrain", "BH", 0},
+    {"Bangladesh", "BD", 0},
+    {"Bhutan", "BT", 0},
+    {"Brunei", "BN", 0},
+    {"Cambodia", "KH", 0},
+    {"China", "CN", 0},
+    {"Georgia", "GE", 0},
+    {"India", "IN", 0},
+    {"Indonesia", "ID", 0},
+    {"Iran", "IR", 0},
+    {"Iraq", "IQ", 0},
+    {"Israel", "IL", 0},
+    {"Japan", "JP", 0},
+    {"Jordan", "JO", 0},
+    {"Kazakhstan", "KZ", 0},
+    {"Kuwait", "KW", 0},
+    {"Kyrgyzstan", "KG", 0},
+    {"Laos", "LA", 0},
+    {"Lebanon", "LB", 0},
+    {"Malaysia", "MY", 0},
+    {"Maldives", "MV", 0},
+    {"Mongolia", "MN", 0},
+    {"Myanmar", "MM", 0},
+    {"Nepal", "NP", 0},
+    {"North Korea", "KP", 0},
+    {"Oman", "OM", 0},
+    {"Pakistan", "PK", 0},
+    {"Philippines", "PH", 0},
+    {"Qatar", "QA", 0},
+    {"Saudi Arabia", "SA", 0},
+    {"Singapore", "SG", 0},
+    {"South Korea", "KR", 0},
+    {"Sri Lanka", "LK", 0},
+    {"Syria", "SY", 0},
+    {"Taiwan", "TW", 0},
+    {"Tajikistan", "TJ", 0},
+    {"Thailand", "TH", 0},
+    {"Timor-Leste", "TL", 0},
+    {"Turkey", "TR", 0},
+    {"Turkmenistan", "TM", 0},
+    {"United Arab Emirates", "AE", 0},
+    {"Uzbekistan", "UZ", 0},
+    {"Vietnam", "VN", 0},
+    {"Yemen", "YE", 0}
+};
+
+/* North America */
+Country NA[] = {
+    {"Antigua and Barbuda", "AG", 0},
+    {"Bahamas", "BS", 0},
+    {"Barbados", "BB", 0},
+    {"Belize", "BZ", 0},
+    {"Canada", "CA", 0},
+    {"Costa Rica", "CR", 0},
+    {"Cuba", "CU", 0},
+    {"Dominica", "DM", 0},
+    {"Dominican Republic", "DO", 0},
+    {"El Salvador", "SV", 0},
+    {"Grenada", "GD", 0},
+    {"Guatemala", "GT", 0},
+    {"Haiti", "HT", 0},
+    {"Honduras", "HN", 0},
+    {"Jamaica", "JM", 0},
+    {"Mexico", "MX", 0},
+    {"Nicaragua", "NI", 0},
+    {"Panama", "PA", 0},
+    {"Saint Kitts and Nevis", "KN", 0},
+    {"Saint Lucia", "LC", 0},
+    {"Saint Vincent and the Grenadines", "VC", 0},
+    {"Trinidad and Tobago", "TT", 0},
+    {"United States", "US", 0}
+};
+
+/* South America */
+Country SA[] = {
+    {"Argentina", "AR", 0},
+    {"Bolivia", "BO", 0},
+    {"Brazil", "BR", 0},
+    {"Chile", "CL", 0},
+    {"Colombia", "CO", 0},
+    {"Ecuador", "EC", 0},
+    {"Guyana", "GY", 0},
+    {"Paraguay", "PY", 0},
+    {"Peru", "PE", 0},
+    {"Suriname", "SR", 0},
+    {"Uruguay", "UY", 0},
+    {"Venezuela", "VE", 0}
+};
+
+/* Oceania */
+Country OCE[] = {
+    {"Australia", "AU", 0},
+    {"Fiji", "FJ", 0},
+    {"Kiribati", "KI", 0},
+    {"Marshall Islands", "MH", 0},
+    {"Micronesia", "FM", 0},
+    {"Nauru", "NR", 0},
+    {"New Zealand", "NZ", 0},
+    {"Palau", "PW", 0},
+    {"Papua New Guinea", "PG", 0},
+    {"Samoa", "WS", 0},
+    {"Solomon Islands", "SB", 0},
+    {"Tonga", "TO", 0},
+    {"Tuvalu", "TV", 0},
+    {"Vanuatu", "VU", 0}
+};
+
+Country* get_continent_data(const char *continent_code, int *size) {
+    if (strcmp(continent_code, "AF") == 0) { *size = sizeof(AF)/sizeof(AF[0]); return AF; }
+    if (strcmp(continent_code, "EU") == 0) { *size = sizeof(EU)/sizeof(EU[0]); return EU; }
+    if (strcmp(continent_code, "AS") == 0) { *size = sizeof(AS)/sizeof(AS[0]); return AS; }
+    if (strcmp(continent_code, "NA") == 0) { *size = sizeof(NA)/sizeof(NA[0]); return NA; }
+    if (strcmp(continent_code, "SA") == 0) { *size = sizeof(SA)/sizeof(SA[0]); return SA; }
+    if (strcmp(continent_code, "OC") == 0 || strcmp(continent_code, "OCE") == 0) { *size = sizeof(OCE)/sizeof(OCE[0]); return OCE; }
+    *size = 0;
+    return NULL;
+}
