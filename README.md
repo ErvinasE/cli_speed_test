@@ -2,7 +2,7 @@
 
 This tool automatically determines your geographic location, selects the most optimal server based on latency, and calculates your network speeds in Megabits per second (Mbps).
 
-## Results
+# Results
 ### Automated test
 ```bash
 ./speed_test
@@ -35,6 +35,27 @@ Upload speed is : 865.4 Mbps
 ./speed_test -d speedtest.litnet.lt:8080
 Test Results:
 Download speed is : 924.7 Mbps
+```
+# Usage
+### Automatic test (location > best server > upload > download)
+```bash
+./speed_test
+```
+### Determining location
+```bash
+./speed_test -l
+```
+### Determining best server 
+```bash
+./speed_test -p
+```
+### Upload speed
+```bash
+./speed_test -u (host)
+```
+### Download speed
+```bash
+./speed_test -u (host)
 ```
 ## Features
 
