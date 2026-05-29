@@ -1,0 +1,64 @@
+ervinas@work:~/repo/speed_test$ ./speed_test 
+Determining your location...
+Succesfully determined your location
+Finding the best server for your location...
+Checking: speedtest.litnet.lt:8080 server 
+Checking: speed-kaunas.telia.lt:8080 server 
+Checking: speedtest.kis.lt:8080 server 
+Checking: sp1.kli.lt:8080 server 
+Checking: stnet1.balticum.lt:8080 server 
+Checking: speedtest.bacloud.com:8080 server 
+Checking: speedtest1.ntt.lt:8080 server 
+Connection Error : Invalid Host
+Checking: speedtest-vno.init.lt:8080 server 
+Checking: speedtest.rackray.eu:8080 server 
+Connection Error : Invalid Host
+Checking: speedtest.bite.lt:8080 server 
+Checking: vln038-speedtest-1.tele2.net:8080 server 
+Connection Error : Invalid Host
+Checking: speedtest-01.cgates.lt:8080 server 
+Connection Error : Invalid Host
+Uploading 32mb of data to speed-kaunas.telia.lt:8080
+Downloading 32mb of data from speed-kaunas.telia.lt:8080
+********************************************************************************************************
+Test Results:
+Your location: Lithuania
+Server: speed-kaunas.telia.lt:8080
+Upload speed is : 876.4 Mbps
+Download speed is : 931.7 Mbps
+ervinas@work:~/repo/speed_test$ ./speed_test -l
+Determining your location...
+*************************************************************
+Test Results:
+Country: Lithuania
+ervinas@work:~/repo/speed_test$ ./speed_test -p
+Finding the best server for your location...
+Checking: speedtest.litnet.lt:8080 server 
+Checking: speed-kaunas.telia.lt:8080 server 
+Checking: speedtest.kis.lt:8080 server 
+Checking: sp1.kli.lt:8080 server 
+Checking: stnet1.balticum.lt:8080 server 
+Checking: speedtest.bacloud.com:8080 server 
+Checking: speedtest1.ntt.lt:8080 server 
+Connection Error : Invalid Host
+Checking: speedtest-vno.init.lt:8080 server 
+Checking: speedtest.rackray.eu:8080 server 
+Connection Error : Invalid Host
+Checking: speedtest.bite.lt:8080 server 
+Checking: vln038-speedtest-1.tele2.net:8080 server 
+Connection Error : Invalid Host
+Checking: speedtest-01.cgates.lt:8080 server 
+Connection Error : Invalid Host
+*************************************************************
+Test Results:
+Best server is: speedtest.bite.lt:8080
+ervinas@work:~/repo/speed_test$ ./speed_test -u speedtest.litnet.lt:8080
+Uploading 32mb of data to speedtest.litnet.lt:8080
+*************************************************************
+Test Results:
+Upload speed is : 861.2 Mbps
+ervinas@work:~/repo/speed_test$ ./speed_test -d speedtest.litnet.lt:8080
+Downloading 32mb of data from speedtest.litnet.lt:8080
+*************************************************************
+Test Results:
+Download speed is : 915.1 Mbps
