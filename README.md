@@ -2,7 +2,7 @@
 
 A lightweight, command-line interface (CLI) application written in C to test internet download and upload speeds. This tool automatically determines your geographic location, selects the most optimal server based on latency, and calculates your network speeds in Megabits per second (Mbps).
 
-## 🚀 Features
+## Features
 
 * **Automated Testing**: Run the application without arguments to automatically detect your location, find the best server, and perform both download and upload tests.
 * **Location Detection**: Resolves the user's physical location (Country and Continent Code) using the `ip-api.com` service.
@@ -11,7 +11,7 @@ A lightweight, command-line interface (CLI) application written in C to test int
 * **Targeted Operations**: Uses `getopt` to provide CLI flags, allowing users to run specific parts of the program individually.
 * **Fallback Logic**: Automatically expands the search to the wider continent if no responsive servers are found within the specific country.
 
-## 🛠️ Dependencies
+## Dependencies
 
 To compile and run this application, you must have the following libraries installed on your system:
 
