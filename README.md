@@ -74,6 +74,7 @@ make clean
 * **Optimal Server Selection**: Parses a local `speedtest_server_list.json` file via `cJSON` and pings servers to find the lowest latency host in your country or continent.
 * **Speed Measurement**: Evaluates download and upload speeds by transferring a 32MB payload, enforcing a strict 15-second timeout for both operations.
 * **Targeted Operations**: Uses `getopt` to provide CLI flags, allowing users to run specific parts of the program individually.
+* **Testing logs**: Included full testing logs from all tests.
 
 ## Dependencies
 
